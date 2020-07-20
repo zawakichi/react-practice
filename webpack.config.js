@@ -1,54 +1,37 @@
+//babel8
+const path = require("path");
+const outputPath = path.resolve(__dirname, 'public');
+console.log('outputPath: ' + outputPath);
+
 module.exports = {
-  // モード値を production に設定すると最適化された状態で、
-  // development に設定するとソースマップ有効でJSファイルが出力される
-  mode: "production",
-  entry: './src/main.js',
-  // ファイルの出力設定
-  output: {
-    //  出力ファイルのディレクトリ名
-    path: `${__dirname}/dist`,
-    // 出力ファイル名
-    filename: 'bundle.js'
+  mode: 'development',
+  entry: {
+    app:'./src/index.js'
   },
+  output: {
+    path: path.resolve(__dirname, './public'),
+    filename: "bundle.js"
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, './public'),
+    port: 9000,
+    publicPath: '/js/'
+  },
+  devtool: "eval-source-map",
   module: {
     rules: [
       {
-        // 拡張子 .js の場合
         test: /\.js$/,
-        use: [
-          {
-            // Babel を利用する
-            loader: "babel-loader",
-            // Babel のオプションを指定する
-            options: {
-              presets: [
-                // プリセットを指定することで、ES2020 を ES5 に変換
-                "@babel/preset-env",
-                // React の JSX を解釈
-                "@babel/react"
-              ]
-            }
-          }
-        ]
-      },
-      {
-        // 拡張子 .js の場合
-        test: /\.jsx$/,
-        use: [
-          {
-            // Babel を利用する
-            loader: "babel-loader",
-            // Babel のオプションを指定する
-            options: {
-              presets: [
-                // プリセットを指定することで、ES2020 を ES5 に変換
-                "@babel/preset-env",
-                // React の JSX を解釈
-                "@babel/react"
-              ]
-            }
-          }
-        ]
+        enforce: "pre",
+        exclude: /node_modules/,
+        loader: "eslint-loader"
+      }, {
+        test: /\.css$/,
+        loader: ["style-loader","css-loader"]
+      }, {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
       }
     ]
   }
