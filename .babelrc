@@ -1,0 +1,4 @@
+{
+  //babel 8
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
